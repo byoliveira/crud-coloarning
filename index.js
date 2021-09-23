@@ -16,10 +16,12 @@ app.use(express.json()) // aqui eu defino o tipo de dado a ser trafegado
  */
 
 
-const usuarios = [] // aqui fica armazenado todos os usuários
+//const usuarios = [] // aqui fica armazenado todos os usuários
 
 app.get('/users', (request, response) => {
-    return response.json(usuarios) // retornar meu vetor de array
+    return response.json([
+      "OOOOOI"
+    ]) // retornar meu vetor de array
 })
 
 // http://localhost:3333/users
@@ -61,5 +63,19 @@ app.put('/users/:id', (request, response) => {
   return response.json(usuario)
 })
 
-app.listen(3333)  //  http://localhost:3333
+app.delete('/users/:id', (request, response) => {
+  const { id } = request.params;
 
+  // aqui eu só valido se ele existe ou não dentro do meu vetor
+  const userIndex = usuarios.findIndex( usuario => usuario.id === id)
+
+  if( userIndex < 0 ) {
+    return response.status(400).json({ error: 'Usuário não encotrado'})
+  }
+
+  usuarios.splice(userIndex, 1);
+
+  return response.status(204).send();
+})
+
+app.listen(3333)  //  http://localhost:3333/users
